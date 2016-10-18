@@ -1,0 +1,23 @@
+{
+  "name": "bowling_game",
+  "version": "0.0.1",
+  "description": "scoring and game state display",
+  "main": "server.js",
+  "scripts": {
+    "webpack-dev": "webpack --config webpack.config.dev.js",
+    "start": "node server.js"
+  },
+  "repository": "",
+  "author": "Tonnam Balankura <tonnam.balankura@gmail.com>",
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "express": "^4.14.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.8.4"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.16.0"
+  }
+}
