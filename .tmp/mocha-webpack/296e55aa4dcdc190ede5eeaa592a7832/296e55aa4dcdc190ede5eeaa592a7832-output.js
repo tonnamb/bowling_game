@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/public/";
+/******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -42,6 +42,61 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var testsContext = __webpack_require__(1);
+
+	var runnable = testsContext.keys();
+
+	runnable.forEach(testsContext);
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./BowlingGameTest.js": 2
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 1;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var BowlingGame = __webpack_require__(3);
+
+	var chai = __webpack_require__(4);
+
+	var expect = chai.expect;
+
+	describe("BowlingGame", function () {
+	    it("handle gutter game", function () {
+	        var game = new BowlingGame();
+	        for (var i = 0; i < 20; i++) {
+	            game.roll(0);
+	        }
+	        expect(game.score()).to.equal(0);
+	    });
+	});
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -98,6 +153,12 @@
 	};
 
 	module.exports = BowlingGame;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = require("chai");
 
 /***/ }
 /******/ ]);
