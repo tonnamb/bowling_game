@@ -85,7 +85,7 @@
 	            game.roll(pins);
 	            var pins2 = { 1: true, 2: true, 3: true, 4: true, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
-	            expect(game.score).to.deep.equal({ 1: { 1: 3, 2: 3, cumScore: 6 } });
+	            expect(game.score).to.deep.equal({ 1: { 1: 3, 2: 3, cumScore: 6 }, 2: { cumScore: 6 } });
 	            expect(game.pinsAfter).to.equal(null);
 	            expect(game.currentFrame).to.equal(2);
 	            expect(game.currentRoll).to.equal(1);
@@ -94,7 +94,7 @@
 	            var game = new _BowlingGame2.default();
 	            var pins = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins);
-	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 10 } });
+	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 10 }, 2: { cumScore: 10 } });
 	            expect(game.pinsAfter).to.equal(null);
 	            expect(game.currentFrame).to.equal(2);
 	            expect(game.currentRoll).to.equal(1);
@@ -109,7 +109,7 @@
 	            game.roll(pins);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
-	            expect(game.score).to.deep.equal({ 1: { 1: 9, 2: 1, cumScore: 10 } });
+	            expect(game.score).to.deep.equal({ 1: { 1: 9, 2: 1, cumScore: 10 }, 2: { cumScore: 10 } });
 	            expect(game.pinsAfter).to.equal(null);
 	            expect(game.currentFrame).to.equal(2);
 	            expect(game.currentRoll).to.equal(1);
@@ -117,6 +117,53 @@
 	            expect(game._boolSpareBonus).to.equal(true);
 	            expect(game._boolStrikeBonus1).to.equal(false);
 	            expect(game._boolStrikeBonus2).to.equal(false);
+	        });
+	        it("throws error when pins appear to stand back up after being knocked down", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins);
+	            var pins2 = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            expect(function () {
+	                return game.roll(pins2);
+	            }).to.throw('Pin ' + 2 + ' appears to stand back up after being knocked down');
+	        });
+	        it("rolls the second frame", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: true };
+	            game.roll(pins);
+	            var pins2 = { 1: false, 2: true, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins2);
+	            var pins3 = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: true, 8: true, 9: true, 10: false };
+	            game.roll(pins3);
+	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: true, 9: true, 10: false };
+	            game.roll(pins4);
+	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 2, cumScore: 9 }, 2: { 1: 5, 2: 3, cumScore: 17 }, 3: { cumScore: 17 } });
+	            expect(game.pinsAfter).to.equal(null);
+	            expect(game.currentFrame).to.equal(3);
+	            expect(game.currentRoll).to.equal(1);
+	        });
+	        it("rolls a spare in the first frame and scores after", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: true, 7: false, 8: false, 9: true, 10: false };
+	            game.roll(pins);
+	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins2);
+	            var pins3 = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: true, 8: true, 9: true, 10: false };
+	            game.roll(pins3);
+	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 3, cumScore: 15 }, 2: { 1: 5, cumScore: 15 } });
+	            expect(game.pinsAfter).to.deep.equal(pins3);
+	            expect(game.currentFrame).to.equal(2);
+	            expect(game.currentRoll).to.equal(2);
+	            expect(game._isSpare(1)).to.equal(true);
+	            expect(game._boolSpareBonus).to.equal(false);
+	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: true, 9: true, 10: false };
+	            game.roll(pins4);
+	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 3, cumScore: 15 }, 2: { 1: 5, 2: 3, cumScore: 18 }, 3: { cumScore: 18 } });
+	            expect(game.pinsAfter).to.equal(null);
+	            expect(game.currentFrame).to.equal(3);
+	            expect(game.currentRoll).to.equal(1);
+	            expect(game._isSpare(2)).to.equal(false);
+	            expect(game._boolSpareBonus).to.equal(false);
 	        });
 	    });
 	});
@@ -163,9 +210,14 @@
 		_createClass(BowlingGame, [{
 			key: 'roll',
 			value: function roll(pins) {
+				// called each time the player rolls a ball.
+				// pins [=] { 1: true, 2: false, ... }, labeled bottom-up, reflects the lane control hardware.
+
+				// Do nothing if end of game
 				if (this._isEndOfGame()) {
 					return;
 				}
+				// this.pinsAfter is set to null at the end of every frame, thus all pins are up
 				this.pinsBefore = this.pinsAfter || {
 					1: true,
 					2: true,
@@ -179,89 +231,130 @@
 					10: true
 				};
 				this.pinsAfter = pins;
+
+				// get score of current roll
 				var toScore = this._comparePins();
+
+				// update this.score
 				this.score = this._calcScore(toScore);
 
+				// logic for moving into next roll and frame
+				// for frames 1-9
 				if (this.currentFrame !== 10) {
+					// move to next frame if strike or this is the second roll
 					if (this._isStrike() || this.currentRoll === 2) {
 						this.pinsAfter = null;
 						this.currentFrame += 1;
+						// Initialize next frame score object
+						this.score[this.currentFrame] = { cumScore: this.score[this.currentFrame - 1].cumScore };
 						this.currentRoll = 1;
+						// move to next roll if this is the first roll
 					} else if (this.currentRoll === 1) {
 						this.currentRoll += 1;
 					}
+					// for frame 10
 				} else {
+					// reset pins if strike or spare
 					if (this._isStrike() || this._isSpare()) {
 						this.pinsAfter = null;
 						this.currentRoll += 1;
+						// move to next roll if this is the first roll
 					} else if (this.currentRoll === 1) {
 						this.currentRoll += 1;
+						// move to next roll if 1st roll = strike, 2nd roll = pins are left
+					} else if (this._boolStrikeBonus2) {
+						this.currentRoll += 1;
 					}
+					// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
 				}
 			}
 		}, {
 			key: '_comparePins',
 			value: function _comparePins() {
+				// get score of current roll
+
 				var counter = 0;
+				// loop through all pins
 				for (var i = 1; i <= 10; i += 1) {
+					// add to counter if pin is knocked down
 					if (this.pinsBefore[i] === true && this.pinsAfter[i] === false) {
 						counter += 1;
-					} else if (this.pinsBefore[i] === false && this.pinsAfter[i] === true) {
-						throw new RollException('Pin ' + i + ' appears to stand back up after being knocked down');
 					}
+					// throw error if pin stands back up after being knocked down
+					else if (this.pinsBefore[i] === false && this.pinsAfter[i] === true) {
+							throw new Error('Pin ' + i + ' appears to stand back up after being knocked down');
+						}
 				}
 				return counter;
 			}
 		}, {
 			key: '_calcScore',
 			value: function _calcScore(toScore) {
-				var scoreBefore = this.score;
-				scoreBefore[this.currentFrame][this.currentRoll] = toScore;
-				if (scoreBefore[this.currentFrame].cumScore) {
-					scoreBefore[this.currentFrame].cumScore += toScore;
-				} else {
-					scoreBefore[this.currentFrame].cumScore = toScore;
-				}
+				// calculates and format score object
 
+				// cache this.score
+				var scoreBefore = this.score;
+
+				// set score of the current roll
+				scoreBefore[this.currentFrame][this.currentRoll] = toScore;
+
+				// add to cumulative score (no bonuses yet)
+				scoreBefore[this.currentFrame].cumScore += toScore;
+
+				// logic for adding spare and strike bonus
+				// for frames 1-9
 				if (this.currentFrame !== 10) {
+					// add score to previous frame if strike bonus 1
 					if (this._boolStrikeBonus1) {
 						scoreBefore[this.currentFrame - 1].cumScore += toScore;
 						this._boolStrikeBonus1 = false;
 						this._boolStrikeBonus2 = true;
+						// add score to second previous roll if strike bonus 2
 					} else if (this._boolStrikeBonus2) {
+						// add to second previous frame if first roll
 						if (this.currentRoll === 1) {
 							scoreBefore[this.currentFrame - 2].cumScore += toScore;
+							// add to previous frame if second roll
 						} else {
 							scoreBefore[this.currentFrame - 1].cumScore += toScore;
 						}
 						this._boolStrikeBonus2 = false;
 					}
+					// add score to previous frame if spare bonus
 					if (this._boolSpareBonus) {
 						scoreBefore[this.currentFrame - 1].cumScore += toScore;
 						this._boolSpareBonus = false;
 					}
+					// for frame 10
 				} else {
 					if (this._boolStrikeBonus1) {
+						// add score to previous frame if first roll
 						if (this.currentRoll === 1) {
 							scoreBefore[this.currentFrame - 1].cumScore += toScore;
+							// add score to frame 10 if 2nd or 3rd roll
 						} else {
 							scoreBefore[this.currentFrame].cumScore += toScore;
 						}
 						this._boolStrikeBonus1 = false;
 						this._boolStrikeBonus2 = true;
 					} else if (this._boolStrikeBonus2) {
+						// add score to second previous frame if first roll
 						if (this.currentRoll === 1) {
 							scoreBefore[this.currentFrame - 2].cumScore += toScore;
+							// add score to previous frame if second roll
 						} else if (this.currentRoll === 2) {
 							scoreBefore[this.currentFrame - 1].cumScore += toScore;
+							// add score to frame 10 if third roll
 						} else {
 							scoreBefore[this.currentFrame].cumScore += toScore;
 						}
 						this._boolStrikeBonus2 = false;
 					}
 					if (this._boolSpareBonus) {
+						// add score to previous frame if first roll
 						if (this.currentRoll === 1) {
 							scoreBefore[this.currentFrame - 1].cumScore += toScore;
+							// add score to frame 10 if 2nd or 3rd roll
 						} else {
 							scoreBefore[this.currentFrame].cumScore += toScore;
 						}
@@ -269,12 +362,15 @@
 					}
 				}
 
+				// enable first strike bonus if strike
 				if (this._isStrike()) {
 					this._boolStrikeBonus1 = true;
+					// enable spare bonus if spare
 				} else if (this._isSpare()) {
 					this._boolSpareBonus = true;
 				}
 
+				// return modified this.score
 				return scoreBefore;
 			}
 		}, {
@@ -298,11 +394,6 @@
 
 		return BowlingGame;
 	}();
-
-	function RollException(message) {
-		this.message = message;
-		this.name = "RollException";
-	}
 
 	exports.default = BowlingGame;
 

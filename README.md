@@ -16,7 +16,7 @@ If you need additional information, there is also more scoring here ('http://slo
 
 ![Pins](http://www.clker.com/cliparts/O/6/o/5/Z/5/bowling-pins-diagram.svg)
 
-Write class "BowlingGame" with methods:
+Write class "BowlingGame" with public methods:
 
 * roll(pins)
   * called each time the player rolls a ball.
@@ -24,19 +24,13 @@ Write class "BowlingGame" with methods:
   * update these variables:
     * this.pinsBefore [=] this.pinsAfter || { 1: true, 2: true, ... }
     * this.pinsAfter [=] pins
-    * this.rollsToGo [=] integer value of roll to go until end of frame
-  * call these methods:
-    * this.score = this._calcScore()
+    * this.currentRoll [=] according to roll logic
+    * this.currentFrame [=] according to frame logic
+    * this.score = this._calcScore() [=] handles spare and strike bonuses
     * this.scoreBoard = this.writeScoreBoard()
 
-* _calcScore()
-  * does calculation only if this.score.(this.currentFrame).(this.currentRoll) === undefined
-  * update these variables:
-    * this.currentFrame [=] integer value of current frame
-    * this.currentRoll [=] integer value of current roll
-  * returns { frameIndex: { 1: #, 2: #, 3: #, cumScore: # }, ... }
-
 * writeScoreBoard()
+  * format for rendering to scoreboard
   * returns { frameIndex: {1: '#', 2: '/', 3: 'X', frameScore: '#'}, ... }
   
 
@@ -50,7 +44,7 @@ Write class "BowlingGame" with methods:
 
 ## Technologies
 
-* Mocha, Chai (behavior-driven development)
+* Mocha, Chai (test-driven development, behavior-driven syntax)
 * Karma (test runner for multiple browsers)
 * webpack (modules bundler, babel-loader)
 * babel (transpile ES6 into ES5)
