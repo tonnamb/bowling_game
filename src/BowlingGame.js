@@ -74,7 +74,7 @@ class BowlingGame {
 				} else if (this.currentRoll === 1) {
 					this.currentRoll += 1;
 				// move to next roll if 1st roll = strike, 2nd roll = pins are left
-				} else if (this._boolStrikeBonus2) {
+				} else if (this._isStrike(10, 1)) {
 					this.currentRoll += 1;
 				}
 				// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
