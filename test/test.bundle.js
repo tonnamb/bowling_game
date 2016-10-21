@@ -426,78 +426,35 @@
 				scoreBefore[this.currentFrame].cumScore += toScore;
 
 				// logic for adding spare and strike bonus
-				// for frames 1-9
-				if (this.currentFrame !== 10) {
-					// add score to previous and current frame if strike bonus 1
-					if (this._boolStrikeBonus2) {
-						// add to second previous, previous, and current frame if first roll
-						if (this.currentRoll === 1) {
-							scoreBefore[this.currentFrame - 2].cumScore += toScore;
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-							// add to previous and current frame if second roll
-						} else {
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-						}
-						this._boolStrikeBonus2 = false;
-					}
-					if (this._boolStrikeBonus1) {
+				// add score to previous and current frame if strike bonus 1
+				if (this._boolStrikeBonus2) {
+					// add to second previous, previous, and current frame if first roll
+					if (this.currentRoll === 1) {
+						scoreBefore[this.currentFrame - 2].cumScore += toScore;
 						scoreBefore[this.currentFrame - 1].cumScore += toScore;
 						scoreBefore[this.currentFrame].cumScore += toScore;
-						this._boolStrikeBonus1 = false;
-						this._boolStrikeBonus2 = true;
-						// add score to second previous, previous and current roll if strike bonus 2
-					}
-					// add score to previous and current frame if spare bonus
-					if (this._boolSpareBonus) {
+						// add to previous and current frame if second roll
+					} else {
 						scoreBefore[this.currentFrame - 1].cumScore += toScore;
 						scoreBefore[this.currentFrame].cumScore += toScore;
-						this._boolSpareBonus = false;
 					}
-					// for frame 10
-				} else {
-					if (this._boolStrikeBonus2) {
-						// add score to second previous, previous and current frame if first roll
-						if (this.currentRoll === 1) {
-							scoreBefore[this.currentFrame - 2].cumScore += toScore;
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-							// add score to previous and current frame if second roll
-						} else if (this.currentRoll === 2) {
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-							// add score to frame 10 if third roll
-						} else {
-							scoreBefore[this.currentFrame].cumScore += toScore;
-						}
-						this._boolStrikeBonus2 = false;
-					}
-					if (this._boolStrikeBonus1) {
-						// add score to previous and current frame if first roll
-						if (this.currentRoll === 1) {
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-							// add score to frame 10 if 2nd or 3rd roll
-						} else {
-							scoreBefore[this.currentFrame].cumScore += toScore;
-						}
-						this._boolStrikeBonus1 = false;
-						this._boolStrikeBonus2 = true;
-					}
-					if (this._boolSpareBonus) {
-						// add score to previous and current frame if first roll
-						if (this.currentRoll === 1) {
-							scoreBefore[this.currentFrame - 1].cumScore += toScore;
-							scoreBefore[this.currentFrame].cumScore += toScore;
-							// add score to frame 10 if 2nd or 3rd roll
-						} else {
-							scoreBefore[this.currentFrame].cumScore += toScore;
-						}
-						this._boolSpareBonus = false;
-					}
+					this._boolStrikeBonus2 = false;
+				}
+				if (this._boolStrikeBonus1) {
+					scoreBefore[this.currentFrame - 1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
+					this._boolStrikeBonus1 = false;
+					this._boolStrikeBonus2 = true;
+					// add score to second previous, previous and current roll if strike bonus 2
+				}
+				// add score to previous and current frame if spare bonus
+				if (this._boolSpareBonus) {
+					scoreBefore[this.currentFrame - 1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
+					this._boolSpareBonus = false;
 				}
 
+				// logic for enabling strike and spare bonus
 				if (this.currentFrame !== 10) {
 					// enable first strike bonus if strike
 					if (this._isStrike()) {
