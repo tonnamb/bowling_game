@@ -65,18 +65,20 @@ class BowlingGame {
 			}
 		// for frame 10
 		} else {
-			// reset pins if strike or spare
-			if (this._isStrike() || this._isSpare()) {
-				this.pinsAfter = null;
-				this.currentRoll += 1;
-			// move to next roll if this is the first roll
-			} else if (this.currentRoll === 1) {
-				this.currentRoll += 1;
-			// move to next roll if 1st roll = strike, 2nd roll = pins are left
-			} else if (this._boolStrikeBonus2) {
-				this.currentRoll += 1;
+			if (this.currentRoll !== 3) {
+				// reset pins if strike or spare
+				if (this._isStrike(10, this.currentRoll) || this._isSpare()) {
+					this.pinsAfter = null;
+					this.currentRoll += 1;
+				// move to next roll if this is the first roll
+				} else if (this.currentRoll === 1) {
+					this.currentRoll += 1;
+				// move to next roll if 1st roll = strike, 2nd roll = pins are left
+				} else if (this._boolStrikeBonus2) {
+					this.currentRoll += 1;
+				}
+				// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
 			}
-			// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
 		}
 	}
 	_comparePins() {
@@ -111,56 +113,68 @@ class BowlingGame {
 		// logic for adding spare and strike bonus
 		// for frames 1-9
 		if (this.currentFrame !== 10) {
-			// add score to previous frame if strike bonus 1
-			if (this._boolStrikeBonus1) {
-				scoreBefore[this.currentFrame-1].cumScore += toScore;
-				this._boolStrikeBonus1 = false;
-				this._boolStrikeBonus2 = true;
-			// add score to second previous roll if strike bonus 2
-			} else if (this._boolStrikeBonus2) {
-				// add to second previous frame if first roll
+			// add score to previous and current frame if strike bonus 1
+			if (this._boolStrikeBonus2) {
+				// add to second previous, previous, and current frame if first roll
 				if (this.currentRoll === 1) {
 					scoreBefore[this.currentFrame-2].cumScore += toScore;
-				// add to previous frame if second roll
+					scoreBefore[this.currentFrame-1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
+				// add to previous and current frame if second roll
 				} else {
 					scoreBefore[this.currentFrame-1].cumScore += toScore
+					scoreBefore[this.currentFrame].cumScore += toScore;
 				}
 				this._boolStrikeBonus2 = false;
 			}
-			// add score to previous frame if spare bonus
+			if (this._boolStrikeBonus1) {
+				scoreBefore[this.currentFrame-1].cumScore += toScore;
+				scoreBefore[this.currentFrame].cumScore += toScore;
+				this._boolStrikeBonus1 = false;
+				this._boolStrikeBonus2 = true;
+			// add score to second previous, previous and current roll if strike bonus 2
+			}
+			// add score to previous and current frame if spare bonus
 			if (this._boolSpareBonus) {
 				scoreBefore[this.currentFrame-1].cumScore += toScore;
+				scoreBefore[this.currentFrame].cumScore += toScore;
 				this._boolSpareBonus = false;
 			}
 		// for frame 10
 		} else {
-			if (this._boolStrikeBonus1) {
-				// add score to previous frame if first roll
-				if (this.currentRoll === 1) {
-					scoreBefore[this.currentFrame-1].cumScore += toScore;
-				// add score to frame 10 if 2nd or 3rd roll
-				} else {
-					scoreBefore[this.currentFrame].cumScore += toScore;
-				}
-				this._boolStrikeBonus1 = false;
-				this._boolStrikeBonus2 = true;
-			} else if (this._boolStrikeBonus2) {
-				// add score to second previous frame if first roll
+			if (this._boolStrikeBonus2) {
+				// add score to second previous, previous and current frame if first roll
 				if (this.currentRoll === 1) {
 					scoreBefore[this.currentFrame-2].cumScore += toScore;
-				// add score to previous frame if second roll
+					scoreBefore[this.currentFrame-1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
+				// add score to previous and current frame if second roll
 				} else if (this.currentRoll === 2) {
 					scoreBefore[this.currentFrame-1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
 				// add score to frame 10 if third roll
 				} else {
 					scoreBefore[this.currentFrame].cumScore += toScore;
 				}
 				this._boolStrikeBonus2 = false;
 			}
-			if (this._boolSpareBonus) {
-				// add score to previous frame if first roll
+			if (this._boolStrikeBonus1) {
+				// add score to previous and current frame if first roll
 				if (this.currentRoll === 1) {
 					scoreBefore[this.currentFrame-1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
+				// add score to frame 10 if 2nd or 3rd roll
+				} else {
+					scoreBefore[this.currentFrame].cumScore += toScore;
+				}
+				this._boolStrikeBonus1 = false;
+				this._boolStrikeBonus2 = true;
+			}
+			if (this._boolSpareBonus) {
+				// add score to previous and current frame if first roll
+				if (this.currentRoll === 1) {
+					scoreBefore[this.currentFrame-1].cumScore += toScore;
+					scoreBefore[this.currentFrame].cumScore += toScore;
 				// add score to frame 10 if 2nd or 3rd roll
 				} else {
 					scoreBefore[this.currentFrame].cumScore += toScore;
@@ -169,20 +183,24 @@ class BowlingGame {
 			}
 		}
 		
-		// enable first strike bonus if strike
-		if (this._isStrike()) {
-			this._boolStrikeBonus1 = true;
-		// enable spare bonus if spare
-		} else if (this._isSpare()) {
-			this._boolSpareBonus = true;
+		if (this.currentFrame !== 10) {
+			// enable first strike bonus if strike
+			if (this._isStrike()) {
+				this._boolStrikeBonus1 = true;
+			// enable spare bonus if spare
+			} else if (this._isSpare()) {
+				this._boolSpareBonus = true;
+			}
 		}
+		// no new bonus enabling at frame 10
 		
 		// return modified this.score
 		return scoreBefore;
 	}
-	_isStrike(frame) {
+	_isStrike(frame, roll) {
 		var checkFrame = frame || this.currentFrame;
-		return this.score[checkFrame][1] === 10;
+		var checkRoll = roll || 1;
+		return this.score[checkFrame][checkRoll] === 10;
 	}
 	_isSpare(frame) {
 		var checkFrame = frame || this.currentFrame;

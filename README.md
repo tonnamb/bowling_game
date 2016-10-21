@@ -50,6 +50,16 @@ Write class "BowlingGame" with public methods:
 * babel (transpile ES6 into ES5)
 * static `express` server
 
+## Setup
+
+    $ git clone https://github.com/tonnamb/bowling_game.git
+    $ cd bowling_game
+    $ npm install
+
+## Running tests
+
+    $ npm test
+
 ## Running the server
 
     $ npm start
