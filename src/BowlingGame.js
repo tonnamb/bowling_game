@@ -81,6 +81,53 @@ class BowlingGame {
 			}
 		}
 	}
+	writeScoreBoard() {
+		// cache
+		var score = JSON.parse(JSON.stringify(this.score));
+		var len = this.currentFrame;
+		
+		// all frames before current
+		for (var i = 1; i < len; i += 1) {
+			if (this._isStrike(i)) {
+				score[i][1] = '';
+				score[i][2] = 'X'; // put in second slot which is boxed
+				if (score[i+1][1] !== undefined) { // !== undefined is needed otherwise 0 will be converted into false
+					if (score[i+1][2] !== undefined) {
+						score[i].cumScore = score[i].cumScore.toString();
+					} else if (score[i+2] !== undefined && score[i+2][1] !== undefined) { // && checks if score[i+2] even exists before calling score[i+2][1]
+						score[i].cumScore = score[i].cumScore.toString();
+					} else {
+						score[i].cumScore = '';
+					}
+				} else {
+					score[i].cumScore = '';
+				}
+			} if (this._isSpare(i)) {
+				score[i][1] = (score[i][1] === 0) ? '-' : score[i][1].toString();
+				score[i][2] = '/'
+				score[i].cumScore = (score[i+1][1] !== undefined) ? score[i].cumScore.toString() : '';
+			} else {
+				score[i][1] = (score[i][1] === 0) ? '-' : score[i][1].toString();
+				score[i][2] = (score[i][2] === 0) ? '-' : score[i][2].toString();
+				score[i].cumScore = score[i].cumScore.toString();
+			}
+		}
+		// current frame
+		if (len === 10) {
+			
+		} else {
+			if (score[len][1] !== undefined){
+				score[len].cumScore = (this._isEndOfGame()) ? score[len].cumScore.toString() : '';
+				score[len][1] = (score[len][1] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
+				score[len][2] = (score[len][2] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
+			} else {
+				delete score[len];
+			}
+		}
+		
+		
+		return score;
+	}
 	_comparePins() {
 		// get score of current roll
 		

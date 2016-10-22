@@ -432,6 +432,106 @@
 	            expect(game._boolSpareBonus).to.equal(false);
 	        });
 	    });
+	    describe("writeScoreBoard()", function () {
+	        it("rolls the first ball, displays as string", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins6);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '6', 2: '', cumScore: '' } });
+	            expect(scoreBoard[1][1]).to.be.a('string');
+	            expect(scoreBoard[1][2]).to.be.a('string');
+	            expect(scoreBoard[1].cumScore).to.be.a('string');
+	        });
+	        it("hides next frame score", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins6);
+	            var pins3 = { 1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins3);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '6', 2: '3', cumScore: '9' } });
+	        });
+	        it("strike: show as X and hides unfinished scores", function () {
+	            var game = new _BowlingGame2.default();
+	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(strike);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '', 2: 'X', cumScore: '' } });
+	        });
+	        it("strike: shows unfinished scores after sufficient rolls", function () {
+	            var game = new _BowlingGame2.default();
+	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(strike);
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins6);
+	            var pins3 = { 1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins3);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '', 2: 'X', cumScore: '19' }, 2: { 1: '6', 2: '3', cumScore: '28' } });
+
+	            var game2 = new _BowlingGame2.default();
+	            game2.roll(strike);
+	            game2.roll(strike);
+	            game2.roll(strike);
+	            var scoreBoard2 = game2.writeScoreBoard();
+	            expect(scoreBoard2).to.deep.equal({ 1: { 1: '', 2: 'X', cumScore: '30' }, 2: { 1: '', 2: 'X', cumScore: '' }, 3: { 1: '', 2: 'X', cumScore: '' } });
+
+	            var game3 = new _BowlingGame2.default();
+	            game3.roll(strike);
+	            game3.roll(pins6);
+	            game3.roll(strike);
+	            var scoreBoard3 = game3.writeScoreBoard();
+	            expect(scoreBoard3).to.deep.equal({ 1: { 1: '', 2: 'X', cumScore: '20' }, 2: { 1: '6', 2: '/', cumScore: '' } });
+	        });
+	        it("spare: show as / and hides unfinished scores", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins6);
+	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins4);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '6', 2: '/', cumScore: '' } });
+	        });
+	        it("spare: shows unfinished scores after sufficient rolls", function () {
+	            var game = new _BowlingGame2.default();
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins6);
+	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins4);
+	            var pins7 = { 1: false, 2: false, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(pins7);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '6', 2: '/', cumScore: '17' }, 2: { 1: '7', 2: '', cumScore: '' } });
+
+	            var game2 = new _BowlingGame2.default();
+	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game2.roll(pins6);
+	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game2.roll(pins4);
+	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game2.roll(strike);
+	            var scoreBoard2 = game2.writeScoreBoard();
+	            expect(scoreBoard2).to.deep.equal({ 1: { 1: '6', 2: '/', cumScore: '20' }, 2: { 1: '', 2: 'X', cumScore: '' } });
+	        });
+	        it("does not mutate this.score", function () {
+	            var game = new _BowlingGame2.default();
+	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            game.roll(strike);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '', 2: 'X', cumScore: '' } });
+	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 10 }, 2: { cumScore: 10 } });
+	        });
+	        it("displays 0 as - for pins rolled but not cumulative score", function () {
+	            var game = new _BowlingGame2.default();
+	            var gutter = { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true };
+	            game.roll(gutter);
+	            game.roll(gutter);
+	            game.roll(gutter);
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({ 1: { 1: '-', 2: '-', cumScore: '0' }, 2: { 1: '-', 2: '', cumScore: '' } });
+	        });
+	    });
 	});
 
 /***/ },
@@ -535,6 +635,54 @@
 						// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
 					}
 				}
+			}
+		}, {
+			key: 'writeScoreBoard',
+			value: function writeScoreBoard() {
+				// cache
+				var score = JSON.parse(JSON.stringify(this.score));
+				var len = this.currentFrame;
+
+				// all frames before current
+				for (var i = 1; i < len; i += 1) {
+					if (this._isStrike(i)) {
+						score[i][1] = '';
+						score[i][2] = 'X'; // put in second slot which is boxed
+						if (score[i + 1][1] !== undefined) {
+							// !== undefined is needed otherwise 0 will be converted into false
+							if (score[i + 1][2] !== undefined) {
+								score[i].cumScore = score[i].cumScore.toString();
+							} else if (score[i + 2] !== undefined && score[i + 2][1] !== undefined) {
+								// && checks if score[i+2] even exists before calling score[i+2][1]
+								score[i].cumScore = score[i].cumScore.toString();
+							} else {
+								score[i].cumScore = '';
+							}
+						} else {
+							score[i].cumScore = '';
+						}
+					}if (this._isSpare(i)) {
+						score[i][1] = score[i][1] === 0 ? '-' : score[i][1].toString();
+						score[i][2] = '/';
+						score[i].cumScore = score[i + 1][1] !== undefined ? score[i].cumScore.toString() : '';
+					} else {
+						score[i][1] = score[i][1] === 0 ? '-' : score[i][1].toString();
+						score[i][2] = score[i][2] === 0 ? '-' : score[i][2].toString();
+						score[i].cumScore = score[i].cumScore.toString();
+					}
+				}
+				// current frame
+				if (len === 10) {} else {
+					if (score[len][1] !== undefined) {
+						score[len].cumScore = this._isEndOfGame() ? score[len].cumScore.toString() : '';
+						score[len][1] = score[len][1] !== undefined ? score[len][1] === 0 ? '-' : score[len][1].toString() : '';
+						score[len][2] = score[len][2] !== undefined ? score[len][1] === 0 ? '-' : score[len][1].toString() : '';
+					} else {
+						delete score[len];
+					}
+				}
+
+				return score;
 			}
 		}, {
 			key: '_comparePins',
