@@ -27,7 +27,6 @@ Write class "BowlingGame" with public methods:
     * this.currentRoll [=] according to roll logic
     * this.currentFrame [=] according to frame logic
     * this.score = this._calcScore() [=] handles spare and strike bonuses
-    * this.scoreBoard = this.writeScoreBoard()
 
 * writeScoreBoard()
   * format for rendering to scoreboard
