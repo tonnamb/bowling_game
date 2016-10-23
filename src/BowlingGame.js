@@ -53,8 +53,40 @@ class BowlingGame {
 		// get score of current roll
 		var toScore = this._comparePins();
 		
-		// updates this.score and logic for moving into next roll and frame
-		this._rollScore(toScore);
+		// update this.score
+		this.score = this._calcScore(toScore);
+		
+		// logic for moving into next roll and frame
+		// for frames 1-9
+		if (this.currentFrame !== 10) {
+			// move to next frame if strike or this is the second roll
+			if (this._isStrike() || this.currentRoll === 2) {
+				this.pinsAfter = null;
+				this.currentFrame += 1;
+				// Initialize next frame score object
+				this.score[this.currentFrame] = {cumScore: this.score[this.currentFrame-1].cumScore};
+				this.currentRoll = 1;
+			// move to next roll if this is the first roll
+			} else if (this.currentRoll === 1) {
+				this.currentRoll += 1;
+			}
+		// for frame 10
+		} else {
+			if (this.currentRoll !== 3) {
+				// reset pins if strike or spare
+				if (this._isStrike(10, this.currentRoll) || this._isSpare()) {
+					this.pinsAfter = null;
+					this.currentRoll += 1;
+				// move to next roll if this is the first roll
+				} else if (this.currentRoll === 1) {
+					this.currentRoll += 1;
+				// move to next roll if 1st roll = strike, 2nd roll = pins are left
+				} else if (this._isStrike(10, 1)) {
+					this.currentRoll += 1;
+				}
+				// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
+			}
+		}
 	}
 	writeScoreBoard() {
 		// returns scoreboard format for rendering in the front-end
@@ -239,44 +271,6 @@ class BowlingGame {
 		
 		// return modified this.score
 		return scoreBefore;
-	}
-	_rollScore(toScore) {
-		// toScore is an integer between 0-10
-		
-		// update this.score
-		this.score = this._calcScore(toScore);
-		
-		// logic for moving into next roll and frame
-		// for frames 1-9
-		if (this.currentFrame !== 10) {
-			// move to next frame if strike or this is the second roll
-			if (this._isStrike() || this.currentRoll === 2) {
-				this.pinsAfter = null;
-				this.currentFrame += 1;
-				// Initialize next frame score object
-				this.score[this.currentFrame] = {cumScore: this.score[this.currentFrame-1].cumScore};
-				this.currentRoll = 1;
-			// move to next roll if this is the first roll
-			} else if (this.currentRoll === 1) {
-				this.currentRoll += 1;
-			}
-		// for frame 10
-		} else {
-			if (this.currentRoll !== 3) {
-				// reset pins if strike or spare
-				if (this._isStrike(10, this.currentRoll) || this._isSpare()) {
-					this.pinsAfter = null;
-					this.currentRoll += 1;
-				// move to next roll if this is the first roll
-				} else if (this.currentRoll === 1) {
-					this.currentRoll += 1;
-				// move to next roll if 1st roll = strike, 2nd roll = pins are left
-				} else if (this._isStrike(10, 1)) {
-					this.currentRoll += 1;
-				}
-				// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
-			}
-		}
 	}
 	_isStrike(frame, roll, score) {
 		// method can be called without passing frame and roll
