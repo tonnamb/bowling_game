@@ -85,3 +85,10 @@ If cloning through GitHub is preferred, please execute these commands:
 
 If running from Cloud9, view project at 'https://bowling-game-tonnamb.c9users.io/'. (Replace 'tonnamb' with your username)
 Otherwise, the public files are served at 'http://localhost:8080/'
+
+## To-do
+
+* check if split occurred
+* alert front-end if spare, strike or split have occurred, such that front-end can play the spare, strike or split videos
+* interface for indication of fouls and scores re-calculation accordingly
+* interface for modifying scores, in the case that the physical pin state sensor fails and the player can correct their score

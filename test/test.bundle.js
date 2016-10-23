@@ -9202,8 +9202,10 @@
 	        });
 	        it("strike: shows unfinished scores after sufficient rolls", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1: strike
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(strike);
+	            // Frame 2
 	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins6);
 	            var pins3 = { 1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
@@ -9223,7 +9225,9 @@
 	        it("strike then spare", function () {
 	            var game = new _BowlingGame2.default();
 	            var allout = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1: strike
 	            game.roll(allout);
+	            // Frame 2: spare
 	            var pins6 = { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins6);
 	            game.roll(allout);
