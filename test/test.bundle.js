@@ -766,7 +766,7 @@
 				// calculates and format score object
 
 				// cache this.score
-				var scoreBefore = this.score;
+				var scoreBefore = JSON.parse(JSON.stringify(this.score)); // deep-copy is needed because scoreBefore will be mutated
 
 				// set score of the current roll
 				scoreBefore[this.currentFrame][this.currentRoll] = toScore;
@@ -806,10 +806,10 @@
 				// logic for enabling strike and spare bonus
 				if (this.currentFrame !== 10) {
 					// enable first strike bonus if strike
-					if (this._isStrike()) {
+					if (this._isStrike(this.currentFrame, 1, scoreBefore)) {
 						this._boolStrikeBonus1 = true;
 						// enable spare bonus if spare
-					} else if (this._isSpare()) {
+					} else if (this._isSpare(this.currentFrame, 1, scoreBefore)) {
 						this._boolSpareBonus = true;
 					}
 				}
@@ -820,19 +820,21 @@
 			}
 		}, {
 			key: '_isStrike',
-			value: function _isStrike(frame, roll) {
+			value: function _isStrike(frame, roll, score) {
 				// method can be called without passing frame and roll
 				var checkFrame = frame || this.currentFrame;
 				var checkRoll = roll || 1;
-				return this.score[checkFrame][checkRoll] === 10;
+				var checkScore = score || this.score;
+				return checkScore[checkFrame][checkRoll] === 10;
 			}
 		}, {
 			key: '_isSpare',
-			value: function _isSpare(frame, roll) {
+			value: function _isSpare(frame, roll, score) {
 				// method can be called without passing frame and roll
 				var checkFrame = frame || this.currentFrame;
 				var checkRoll = roll || 1;
-				return this.score[checkFrame][checkRoll] + this.score[checkFrame][checkRoll + 1] === 10;
+				var checkScore = score || this.score;
+				return checkScore[checkFrame][checkRoll] + checkScore[checkFrame][checkRoll + 1] === 10;
 			}
 		}, {
 			key: '_isEndOfGame',
