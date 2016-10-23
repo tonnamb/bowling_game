@@ -12,26 +12,35 @@ If you need additional information, there is also more scoring here ('http://slo
 
 ## Requirements
 
-![Scoreboard](https://camo.githubusercontent.com/ad2710d5e239994189d3f15d2d927225cf9a2b0a/687474703a2f2f7777772e7770636c69706172742e636f6d2f72656372656174696f6e2f73706f7274732f626f776c696e672f626f776c696e675f73636f726573686565745f6578616d706c652e706e67)
-
-![Pins](http://www.clker.com/cliparts/O/6/o/5/Z/5/bowling-pins-diagram.svg)
-
 Write class "BowlingGame" with public methods:
 
-* roll(pins)
-  * called each time the player rolls a ball.
-  * pins [=] { 1: true, 2: false, ... }, labeled bottom-up, reflects the lane control hardware.
-  * update these variables:
-    * this.pinsBefore [=] this.pinsAfter || { 1: true, 2: true, ... }
-    * this.pinsAfter [=] pins
-    * this.currentRoll [=] according to roll logic
-    * this.currentFrame [=] according to frame logic
-    * this.score = this._calcScore() [=] handles spare and strike bonuses
+### this.roll(pins)
 
-* writeScoreBoard()
-  * format for rendering to scoreboard in the front-end
-  * returns { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', frameScore: '#'}, ... }
-  
+Figure 1: Pins bottom-up labelling convention
+
+![Pins](http://www.clker.com/cliparts/O/6/o/5/Z/5/bowling-pins-diagram-md.png)
+
+* called each time the player rolls a ball.
+* pins: { 1: true, 2: false, ... }
+  * labeled bottom-up as Figure 1
+  * true = standing up, false = knocked down
+  * reflects the lane control hardware
+* update these variables:
+  * this.pinsBefore and this.pinsAfter: used to calculate score of roll with this._comparePins()
+  * this.currentFrame: keep track of the current frame, i.e. player is going to roll in this frame next
+  * this.currentRoll: keep track of the current roll within the current frame, i.e. player is going to roll this roll next
+  * this.score: keep track of score, update using this._calcScore()
+
+### this.writeScoreBoard()
+
+Figure 2: Bowling scoreboard example
+
+![Scoreboard](https://camo.githubusercontent.com/ad2710d5e239994189d3f15d2d927225cf9a2b0a/687474703a2f2f7777772e7770636c69706172742e636f6d2f72656372656174696f6e2f73706f7274732f626f776c696e672f626f776c696e675f73636f726573686565745f6578616d706c652e706e67)
+
+* returns scoreboard format for rendering in the front-end
+* does not return empty frames where the game has not reached those frames yet
+* { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', frameScore: '#'}, ... }
+* e.g. {1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '7', 2: '/', cumScore: '37'}, 3: {1: '7', 2: '-', cumScore: '44'}}
 
 ## Design of "BowlingGame" class
 

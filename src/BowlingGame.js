@@ -1,3 +1,5 @@
+'use strict';
+
 class BowlingGame {
 	constructor() {
 		this.pinsBefore = {
@@ -82,84 +84,110 @@ class BowlingGame {
 		}
 	}
 	writeScoreBoard() {
+		// returns scoreboard format for rendering in the front-end
+		
 		// cache
-		var score = JSON.parse(JSON.stringify(this.score));
+		var score = JSON.parse(JSON.stringify(this.score)); // deep-copy is needed because score will be mutated
 		var len = this.currentFrame;
 		
 		// all frames before current
 		for (var i = 1; i < len; i += 1) {
+			// strike cases
 			if (this._isStrike(i)) {
 				score[i][1] = '';
-				score[i][2] = 'X'; // put in second slot which is boxed
+				score[i][2] = 'X'; // put X in second slot which is boxed
+				// hides cumScore if two next rolls does not yet exist
 				if (score[i+1][1] !== undefined) { // !== undefined is needed otherwise 0 will be converted into false
 					if (score[i+1][2] !== undefined) {
 						score[i].cumScore = score[i].cumScore.toString();
-					} else if (score[i+2] !== undefined && score[i+2][1] !== undefined) { // && checks if score[i+2] even exists before calling score[i+2][1]
+					// checks if score[i+2] even exists before calling score[i+2][1]
+					} else if (score[i+2] !== undefined && score[i+2][1] !== undefined) {
+						// &&: if left arg is false, right arg is not called, i.e. short-circuit
 						score[i].cumScore = score[i].cumScore.toString();
 					} else {
 						score[i].cumScore = '';
 					}
+				// else display cumScore
 				} else {
 					score[i].cumScore = '';
 				}
+			// spare cases
 			} if (this._isSpare(i)) {
-				score[i][1] = (score[i][1] === 0) ? '-' : score[i][1].toString();
+				score[i][1] = this._zeroOrNum(score, i, 1);
 				score[i][2] = '/'
+				// hides cumScore if next ball is not rolled yet
 				score[i].cumScore = (score[i+1][1] !== undefined) ? score[i].cumScore.toString() : '';
+			// not strike or spare, i.e. open frame	
 			} else {
-				score[i][1] = (score[i][1] === 0) ? '-' : score[i][1].toString();
-				score[i][2] = (score[i][2] === 0) ? '-' : score[i][2].toString();
+				score[i][1] = this._zeroOrNum(score, i, 1);
+				score[i][2] = this._zeroOrNum(score, i, 2);
+				// always display cumScore
 				score[i].cumScore = score[i].cumScore.toString();
 			}
 		}
 		// current or 10th frame
-		if (score[len][1] !== undefined){
-			if (len === 10) {
+		if (score[len][1] !== undefined){ // if 1st roll is rolled
+			if (len === 10) { // 10th frame
+				// display cumScore only if end of game
 				score[len].cumScore = (this._isEndOfGame()) ? score[len].cumScore.toString() : '';
+				// strike cases
 				if (this._isStrike(len, 1)) {
 					score[len][1] = 'X';
+					// if second roll is rolled
 					if (score[len][2] !== undefined) {
 						if (this._isStrike(len, 2)) {
 							score[len][2] = 'X';
 						} else {
-							score[len][2] = (score[len][2] === 0) ? '-' : score[len][2].toString();
+							score[len][2] = this._zeroOrNum(score, len, 2);
 						}
+					// second roll is not rolled yet
 					} else {
 						score[len][2] = '';
 					}
+					// if third roll is rolled
 					if (score[len][3] !== undefined) {
 						if (this._isStrike(len, 3)) {
 							score[len][3] = 'X';
+						// spare can show up only at the third roll if 1st roll is strike
 						} else if (this._isSpare(len, 2)) {
 							score[len][3] = '/';
 						} else {
-							score[len][3] = (score[len][3] === 0) ? '-' : score[len][3].toString();
+							score[len][3] = this._zeroOrNum(score, len, 3);
 						}
+					// third roll is not rolled yet
 					} else {
 						score[len][3] = '';
 					}
+				// spare cases
 				} else if (this._isSpare(len, 1)) {
-					score[len][1] = (score[len][1] === 0) ? '-' : score[len][1].toString();
+					score[len][1] = this._zeroOrNum(score, len, 1);
 					score[len][2] = '/';
+					// if 3rd roll is rolled
 					if (score[len][3] !== undefined) {
+						// strike can show up only at the 3rd roll if spare
 						if (this._isStrike(len, 3)) {
 							score[len][3] = 'X';
 						} else {
-							score[len][3] = (score[len][3] === 0) ? '-' : score[len][3].toString();
+							score[len][3] = this._zeroOrNum(score, len, 3);
 						}
+					// 3rd roll is not rolled yet
 					} else {
 						score[len][3] = '';
 					}
+				// not strike or spare, i.e. open frame
 				} else {
-					score[len][1] = (score[len][1] === 0) ? '-' : score[len][1].toString();
-					score[len][2] = (score[len][2] !== undefined) ? ((score[len][2] === 0) ? '-' : score[len][2].toString()) : '';
+					score[len][1] = this._zeroOrNum(score, len, 1);
+					score[len][2] = (score[len][2] !== undefined) ? this._zeroOrNum(score, len, 2) : '';
 					score[len][3] = '';
 				}
+			// case for current frame is not 10th frame
 			} else {
 				score[len].cumScore = '';
-				score[len][1] = (score[len][1] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
-				score[len][2] = (score[len][2] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
+				score[len][1] = (score[len][1] !== undefined) ? this._zeroOrNum(score, len, 1) : '';
+				score[len][2] = '';
+				// after second roll, current frame will become next frame, i.e. it will always be empty
 			}
+		// hide last frame if first roll is not rolled yet
 		} else {
 			delete score[len];
 		}
@@ -241,17 +269,25 @@ class BowlingGame {
 		return scoreBefore;
 	}
 	_isStrike(frame, roll) {
+		// method can be called without passing frame and roll
 		var checkFrame = frame || this.currentFrame;
 		var checkRoll = roll || 1;
 		return this.score[checkFrame][checkRoll] === 10;
 	}
 	_isSpare(frame, roll) {
+		// method can be called without passing frame and roll
 		var checkFrame = frame || this.currentFrame;
 		var checkRoll = roll || 1;
 		return this.score[checkFrame][checkRoll] + this.score[checkFrame][checkRoll+1] === 10;
 	}
 	_isEndOfGame() {
 		return (this.currentFrame === 10 && this.score[this.currentFrame][this.currentRoll] !== undefined);
+	}
+	_zeroOrNum(score, frame, roll) {
+		// return '-' for 0
+		// return '1' for 1, vice versa for 1-9
+		// logic for strikes should be put in place before calling this method
+		return (score[frame][roll] === 0) ? '-' : score[frame][roll].toString();
 	}
 }
 
