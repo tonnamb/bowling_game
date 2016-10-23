@@ -1,7 +1,8 @@
 'use strict';
 
 class BowlingGame {
-	constructor() {
+	constructor(player) {
+		this.playerName = player || 'John'; // Default name is 'John'
 		this.pinsBefore = {
 			1: true,
 			2: true,
@@ -25,6 +26,10 @@ class BowlingGame {
 	roll(pins) {
 		// called each time the player rolls a ball.
 		// pins [=] { 1: true, 2: false, ... }, labeled bottom-up, reflects the lane control hardware.
+		
+		if (pins === undefined) {
+			throw new Error('pins object not passed');
+		}
 		
 		// Do nothing if end of game
 		if (this._isEndOfGame()) {

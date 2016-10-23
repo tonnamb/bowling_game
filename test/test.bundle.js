@@ -133,12 +133,27 @@
 	                return game.roll(pins2);
 	            }).to.throw('Pin ' + 2 + ' appears to stand back up after being knocked down');
 	        });
+	        it("throws error when pins object is not passed", function () {
+	            var game = new _BowlingGame2.default();
+	            expect(function () {
+	                return game.roll();
+	            }).to.throw('pins object not passed');
+	        });
+	        it("assigns player name or 'John' as default to this.playerName", function () {
+	            var game = new _BowlingGame2.default();
+	            expect(game.playerName).to.equal('John');
+
+	            var davidGame = new _BowlingGame2.default('David');
+	            expect(davidGame.playerName).to.equal('David');
+	        });
 	        it("rolls the second frame", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1
 	            var pins = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: true };
 	            game.roll(pins);
 	            var pins2 = { 1: false, 2: true, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
+	            // Frame 2
 	            var pins3 = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: true, 8: true, 9: true, 10: false };
 	            game.roll(pins3);
 	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: true, 9: true, 10: false };
@@ -150,10 +165,12 @@
 	        });
 	        it("rolls a spare in the first frame and scores after", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1: spare
 	            var pins = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: true, 7: false, 8: false, 9: true, 10: false };
 	            game.roll(pins);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
+	            // Frame 2
 	            var pins3 = { 1: true, 2: true, 3: false, 4: false, 5: false, 6: false, 7: true, 8: true, 9: true, 10: false };
 	            game.roll(pins3);
 	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 3, cumScore: 15 }, 2: { 1: 5, cumScore: 20 } });
@@ -162,6 +179,9 @@
 	            expect(game.currentRoll).to.equal(2);
 	            expect(game._isSpare(1)).to.equal(true);
 	            expect(game._boolSpareBonus).to.equal(false);
+
+	            // Frame 2, Roll 2
+	            // test if bonus is applied only to 1st roll after spare
 	            var pins4 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: true, 9: true, 10: false };
 	            game.roll(pins4);
 	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 3, cumScore: 15 }, 2: { 1: 5, 2: 3, cumScore: 23 }, 3: { cumScore: 23 } });
@@ -173,8 +193,10 @@
 	        });
 	        it("rolls a strike in the first frame and scores after", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1
 	            var pins = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins);
+	            // Frame 2
 	            var pins2 = { 1: true, 2: false, 3: true, 4: false, 5: true, 6: true, 7: true, 8: true, 9: true, 10: false };
 	            game.roll(pins2);
 	            var pins3 = { 1: false, 2: false, 3: false, 4: false, 5: true, 6: true, 7: true, 8: true, 9: true, 10: false };
@@ -187,6 +209,9 @@
 	            expect(game._boolStrikeBonus1).to.equal(false);
 	            expect(game._boolStrikeBonus2).to.equal(false);
 	            expect(game._boolSpareBonus).to.equal(false);
+
+	            // Frame 3
+	            // Test to see if bonus is only applied to 1st and 2nd roll after strike
 	            var pins4 = { 1: true, 2: true, 3: true, 4: true, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins4);
 	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 15 }, 2: { 1: 3, 2: 2, cumScore: 20 }, 3: { 1: 6, cumScore: 26 } });
@@ -201,8 +226,11 @@
 	        it("rolls three strike in a row and scores after", function () {
 	            var game = new _BowlingGame2.default();
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1
 	            game.roll(strike);
+	            // Frame 2
 	            game.roll(strike);
+	            // Frame 3
 	            game.roll(strike);
 	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 30 }, 2: { 1: 10, cumScore: 50 }, 3: { 1: 10, cumScore: 60 }, 4: { cumScore: 60 } });
 	            expect(game.pinsAfter).to.equal(null);
@@ -214,6 +242,8 @@
 	            expect(game._boolStrikeBonus1).to.equal(true);
 	            expect(game._boolStrikeBonus2).to.equal(true);
 	            expect(game._boolSpareBonus).to.equal(false);
+
+	            // Frame 4, Roll 1
 	            var pins1 = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: true, 8: false, 9: false, 10: true };
 	            game.roll(pins1);
 	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 30 }, 2: { 1: 10, cumScore: 57 }, 3: { 1: 10, cumScore: 74 }, 4: { 1: 7, cumScore: 81 } });
@@ -224,6 +254,8 @@
 	            expect(game._boolStrikeBonus1).to.equal(false);
 	            expect(game._boolStrikeBonus2).to.equal(true);
 	            expect(game._boolSpareBonus).to.equal(false);
+
+	            // Frame 4, Roll 2
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: true };
 	            game.roll(pins2);
 	            expect(game.score).to.deep.equal({ 1: { 1: 10, cumScore: 30 }, 2: { 1: 10, cumScore: 57 }, 3: { 1: 10, cumScore: 76 }, 4: { 1: 7, 2: 2, cumScore: 85 }, 5: { cumScore: 85 } });
@@ -237,15 +269,20 @@
 	        });
 	        it("rolls a combination of spare and strikes", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1: spare
 	            var pins1 = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: true, 8: false, 9: false, 10: true };
 	            game.roll(pins1);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
+	            // Frame 2: strike
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(strike);
+	            // Frame 3: strike
 	            game.roll(strike);
+	            // Frame 4: Spare
 	            game.roll(pins1);
 	            game.roll(pins2);
+	            // Frame 5
 	            game.roll(pins1);
 	            expect(game.score).to.deep.equal({ 1: { 1: 7, 2: 3, cumScore: 20 }, 2: { 1: 10, cumScore: 47 }, 3: { 1: 10, cumScore: 67 }, 4: { 1: 7, 2: 3, cumScore: 84 }, 5: { 1: 7, cumScore: 91 } });
 	            expect(game.pinsAfter).to.deep.equal(pins1);
@@ -313,9 +350,12 @@
 	        it("10th frame: strike then spare", function () {
 	            var game = new _BowlingGame2.default();
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1 - 9: all strike
+	            // Frame 10: Roll 1 = strike
 	            for (var i = 0; i < 10; i += 1) {
 	                game.roll(strike);
 	            }
+	            // Frame 10: Roll 2 & 3 = spare
 	            var pins1 = { 1: true, 2: false, 3: true, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins1);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
@@ -331,11 +371,14 @@
 	        });
 	        it("10th frame: strike, strike, then score", function () {
 	            var game = new _BowlingGame2.default();
+	            // Frame 1 - 9: all strike
+	            // Frame 10: Roll 1 & 2 = strike
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            for (var i = 0; i < 11; i += 1) {
 	                game.roll(strike);
 	            }
 	            expect(game._isEndOfGame()).to.equal(false);
+	            // Frame 10: Roll 3 = score 7
 	            var pins1 = { 1: true, 2: false, 3: true, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins1);
 	            expect(game.currentFrame).to.equal(10);
@@ -350,14 +393,17 @@
 	        it("10th frame: spare then strike", function () {
 	            var game = new _BowlingGame2.default();
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1 - 9: all strike
 	            for (var i = 0; i < 9; i += 1) {
 	                game.roll(strike);
 	            }
+	            // Frame 10: Roll 1 & 2 = spare
 	            var pins1 = { 1: true, 2: false, 3: true, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins1);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
 	            expect(game._isEndOfGame()).to.equal(false);
+	            // Frame 10: Roll 3 = strike
 	            game.roll(strike);
 	            expect(game.currentFrame).to.equal(10);
 	            expect(game.currentRoll).to.equal(3);
@@ -371,14 +417,17 @@
 	        it("10th frame: spare then score", function () {
 	            var game = new _BowlingGame2.default();
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1 - 9: all strike
 	            for (var i = 0; i < 9; i += 1) {
 	                game.roll(strike);
 	            }
+	            // Frame 10: Roll 1 & 2 = spare
 	            var pins1 = { 1: true, 2: false, 3: true, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins1);
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
 	            expect(game._isEndOfGame()).to.equal(false);
+	            // Frame 10: Roll 3 = scores 9
 	            var pins3 = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins3);
 	            expect(game.currentFrame).to.equal(10);
@@ -393,14 +442,18 @@
 	        it("10th frame: gutter, spare then score", function () {
 	            var game = new _BowlingGame2.default();
 	            var strike = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+	            // Frame 1 - 9: all strike
 	            for (var i = 0; i < 9; i += 1) {
 	                game.roll(strike);
 	            }
+	            // Frame 10: Roll 1 = gutter
 	            var gutter = { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true };
 	            game.roll(gutter);
+	            // Frame 10: Roll 2 = spare
 	            var pins2 = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins2);
 	            expect(game._isEndOfGame()).to.equal(false);
+	            // Frame 10: Roll 3 = score 9
 	            var pins3 = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
 	            game.roll(pins3);
 	            expect(game.currentFrame).to.equal(10);
@@ -477,9 +530,10 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var BowlingGame = function () {
-		function BowlingGame() {
+		function BowlingGame(player) {
 			_classCallCheck(this, BowlingGame);
 
+			this.playerName = player || 'John'; // Default name is 'John'
 			this.pinsBefore = {
 				1: true,
 				2: true,
@@ -506,6 +560,10 @@
 			value: function roll(pins) {
 				// called each time the player rolls a ball.
 				// pins [=] { 1: true, 2: false, ... }, labeled bottom-up, reflects the lane control hardware.
+
+				if (pins === undefined) {
+					throw new Error('pins object not passed');
+				}
 
 				// Do nothing if end of game
 				if (this._isEndOfGame()) {

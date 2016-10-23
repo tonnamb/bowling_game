@@ -14,6 +14,12 @@ If you need additional information, there is also more scoring here ('http://slo
 
 Write class "BowlingGame" with public methods:
 
+### constructor(player)
+
+* set player to this.playerName
+* if player is not passed, set this.playerName = 'John' by default
+* initialize game entity
+
 ### this.roll(pins)
 
 Figure 1: Pins bottom-up labelling convention
@@ -37,14 +43,14 @@ Figure 2: Bowling scoreboard example
 
 ![Scoreboard](https://camo.githubusercontent.com/ad2710d5e239994189d3f15d2d927225cf9a2b0a/687474703a2f2f7777772e7770636c69706172742e636f6d2f72656372656174696f6e2f73706f7274732f626f776c696e672f626f776c696e675f73636f726573686565745f6578616d706c652e706e67)
 
-* returns scoreboard format for rendering in the front-end
+* returns scoreboard format, as shown in Figure 2, for rendering in the front-end
 * does not return empty frames where the game has not reached those frames yet
 * { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', frameScore: '#'}, ... }
 * e.g. {1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '7', 2: '/', cumScore: '37'}, 3: {1: '7', 2: '-', cumScore: '44'}}
 
 ## Design of "BowlingGame" class
 
-* One game
+* One game entity per player
 * A game has 10 frames
 * A frame has one or two rolls
 * The tenth frame has two or three rolls
@@ -52,13 +58,18 @@ Figure 2: Bowling scoreboard example
 
 ## Technologies
 
+* JavaScript ES6
 * Mocha, Chai (test-driven development, behavior-driven syntax)
-* Karma (test runner for multiple browsers)
 * webpack (modules bundler, babel-loader)
 * babel (transpile ES6 into ES5)
 * static `express` server
 
 ## Setup
+
+This repository has been written in Cloud9 development environment.
+It can be cloned at 'https://c9.io/tonnamb/bowling_game'.
+
+If cloning through GitHub is preferred, please execute these commands:
 
     $ git clone https://github.com/tonnamb/bowling_game.git
     $ cd bowling_game
@@ -72,4 +83,5 @@ Figure 2: Bowling scoreboard example
 
     $ npm start
 
-Once the server is running, view project at 'https://bowling-game-tonnamb.c9users.io/'.
+If running from Cloud9, view project at 'https://bowling-game-tonnamb.c9users.io/'. (Replace 'tonnamb' with your username)
+Otherwise, the public files are served at 'http://localhost:8080/'
