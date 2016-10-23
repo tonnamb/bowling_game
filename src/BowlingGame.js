@@ -112,17 +112,56 @@ class BowlingGame {
 				score[i].cumScore = score[i].cumScore.toString();
 			}
 		}
-		// current frame
-		if (len === 10) {
-			
-		} else {
-			if (score[len][1] !== undefined){
+		// current or 10th frame
+		if (score[len][1] !== undefined){
+			if (len === 10) {
 				score[len].cumScore = (this._isEndOfGame()) ? score[len].cumScore.toString() : '';
+				if (this._isStrike(len, 1)) {
+					score[len][1] = 'X';
+					if (score[len][2] !== undefined) {
+						if (this._isStrike(len, 2)) {
+							score[len][2] = 'X';
+						} else {
+							score[len][2] = (score[len][2] === 0) ? '-' : score[len][2].toString();
+						}
+					} else {
+						score[len][2] = '';
+					}
+					if (score[len][3] !== undefined) {
+						if (this._isStrike(len, 3)) {
+							score[len][3] = 'X';
+						} else if (this._isSpare(len, 2)) {
+							score[len][3] = '/';
+						} else {
+							score[len][3] = (score[len][3] === 0) ? '-' : score[len][3].toString();
+						}
+					} else {
+						score[len][3] = '';
+					}
+				} else if (this._isSpare(len, 1)) {
+					score[len][1] = (score[len][1] === 0) ? '-' : score[len][1].toString();
+					score[len][2] = '/';
+					if (score[len][3] !== undefined) {
+						if (this._isStrike(len, 3)) {
+							score[len][3] = 'X';
+						} else {
+							score[len][3] = (score[len][3] === 0) ? '-' : score[len][3].toString();
+						}
+					} else {
+						score[len][3] = '';
+					}
+				} else {
+					score[len][1] = (score[len][1] === 0) ? '-' : score[len][1].toString();
+					score[len][2] = (score[len][2] !== undefined) ? ((score[len][2] === 0) ? '-' : score[len][2].toString()) : '';
+					score[len][3] = '';
+				}
+			} else {
+				score[len].cumScore = '';
 				score[len][1] = (score[len][1] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
 				score[len][2] = (score[len][2] !== undefined) ? ((score[len][1] === 0) ? '-' : score[len][1].toString()) : '';
-			} else {
-				delete score[len];
 			}
+		} else {
+			delete score[len];
 		}
 		
 		
@@ -206,9 +245,10 @@ class BowlingGame {
 		var checkRoll = roll || 1;
 		return this.score[checkFrame][checkRoll] === 10;
 	}
-	_isSpare(frame) {
+	_isSpare(frame, roll) {
 		var checkFrame = frame || this.currentFrame;
-		return this.score[checkFrame][1] + this.score[checkFrame][2] === 10;
+		var checkRoll = roll || 1;
+		return this.score[checkFrame][checkRoll] + this.score[checkFrame][checkRoll+1] === 10;
 	}
 	_isEndOfGame() {
 		return (this.currentFrame === 10 && this.score[this.currentFrame][this.currentRoll] !== undefined);

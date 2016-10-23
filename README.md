@@ -29,8 +29,8 @@ Write class "BowlingGame" with public methods:
     * this.score = this._calcScore() [=] handles spare and strike bonuses
 
 * writeScoreBoard()
-  * format for rendering to scoreboard
-  * returns { frameIndex: {1: '#', 2: '/', 3: 'X', frameScore: '#'}, ... }
+  * format for rendering to scoreboard in the front-end
+  * returns { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', frameScore: '#'}, ... }
   
 
 ## Design of "BowlingGame" class
