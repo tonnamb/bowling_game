@@ -9167,10 +9167,13 @@
 
 	var _BowlingGame2 = _interopRequireDefault(_BowlingGame);
 
+	var _chai = __webpack_require__(3);
+
+	var _chai2 = _interopRequireDefault(_chai);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var chai = __webpack_require__(3);
-	var expect = chai.expect;
+	var expect = _chai2.default.expect;
 
 	describe("BowlingGame", function () {
 	    describe("this.writeScoreBoard()", function () {
