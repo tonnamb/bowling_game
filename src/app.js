@@ -4,4 +4,4 @@
 
 console.log('Loading app.js');
 
-import BowlingGame from 'BowlingGame';
+import BowlingGame from './BowlingGame';
