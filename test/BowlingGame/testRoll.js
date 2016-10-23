@@ -2,7 +2,7 @@
 
 import BowlingGame from '../../src/BowlingGame.js';
 
-var chai = require('chai');
+import chai from 'chai';
 var expect = chai.expect;
 
 describe("BowlingGame", function() {

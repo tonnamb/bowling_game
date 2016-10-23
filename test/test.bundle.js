@@ -68,10 +68,13 @@
 
 	var _BowlingGame2 = _interopRequireDefault(_BowlingGame);
 
+	var _chai = __webpack_require__(3);
+
+	var _chai2 = _interopRequireDefault(_chai);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var chai = __webpack_require__(3);
-	var expect = chai.expect;
+	var expect = _chai2.default.expect;
 
 	describe("BowlingGame", function () {
 	    describe("this.roll(pins)", function () {
@@ -9195,6 +9198,11 @@
 	            game.roll(pins3);
 	            var scoreBoard = game.writeScoreBoard();
 	            expect(scoreBoard).to.deep.equal({ 1: { 1: '6', 2: '3', cumScore: '9' } });
+	        });
+	        it("returns empty object when no roll had been rolled yet", function () {
+	            var game = new _BowlingGame2.default();
+	            var scoreBoard = game.writeScoreBoard();
+	            expect(scoreBoard).to.deep.equal({});
 	        });
 	        it("strike: show as X and hides unfinished scores", function () {
 	            var game = new _BowlingGame2.default();

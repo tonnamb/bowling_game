@@ -26,6 +26,11 @@ describe("BowlingGame", function() {
            var scoreBoard = game.writeScoreBoard();
            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '3', cumScore: '9'}});
        });
+       it("returns empty object when no roll had been rolled yet", function () {
+           var game = new BowlingGame();
+           var scoreBoard = game.writeScoreBoard();
+           expect(scoreBoard).to.deep.equal({});
+       });
        it("strike: show as X and hides unfinished scores", function() {
            var game = new BowlingGame();
            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
