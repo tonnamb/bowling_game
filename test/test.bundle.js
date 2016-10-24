@@ -574,7 +574,7 @@
 			this._boolStrikeBonus1 = false;
 			this._boolStrikeBonus2 = false;
 			this._boolSpareBonus = false;
-			this.pinsData = { 1: {} }; // pinsData will be useful for implementation of modifyScore method;
+			this.pinsData = { 1: {} }; // pinsData will be useful for future implementation of modifyScore method;
 		}
 
 		_createClass(BowlingGame, [{
@@ -620,7 +620,7 @@
 					if (this._isStrike() || this.currentRoll === 2) {
 						this.pinsAfter = null;
 						this.currentFrame += 1;
-						// Initialize next frame score object
+						// Initialize next frame score and pinsData
 						this.score[this.currentFrame] = { cumScore: this.score[this.currentFrame - 1].cumScore };
 						this.pinsData[this.currentFrame] = {};
 						this.currentRoll = 1;

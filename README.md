@@ -80,6 +80,10 @@ If cloning through GitHub is preferred, please execute these commands:
 
     $ npm test
 
+## Compile public/app.bundle.js
+
+    $ npm run webpack-dev
+
 ## Running the server
 
     $ npm start
