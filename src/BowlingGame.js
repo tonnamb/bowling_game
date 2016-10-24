@@ -22,7 +22,7 @@ class BowlingGame {
 		this._boolStrikeBonus1 = false;
 		this._boolStrikeBonus2 = false;
 		this._boolSpareBonus = false;
-		this.pinsData = {1: {}}; // pinsData will be useful for implementation of modifyScore method;
+		this.pinsData = {1: {}}; // pinsData will be useful for future implementation of modifyScore method;
 	}
 	roll(pins) {
 		// called each time the player rolls a ball.

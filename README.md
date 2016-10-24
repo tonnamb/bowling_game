@@ -36,6 +36,7 @@ Figure 1: Pins bottom-up labelling convention
   * this.currentFrame: keep track of the current frame, i.e. player is going to roll in this frame next
   * this.currentRoll: keep track of the current roll within the current frame, i.e. player is going to roll this roll next
   * this.score: keep track of score, update using this._calcScore()
+  * this.pinsData: keep track of pins data for each roll, will be useful for future implementation of modifyScore method
 
 ### this.writeScoreBoard()
 
