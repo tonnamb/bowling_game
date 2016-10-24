@@ -80,6 +80,63 @@ If cloning through GitHub is preferred, please execute these commands:
 
     $ npm test
 
+## Tests written
+
+### this.roll(pins)
+
+1. rolls the first ball
+2. rolls the first frame
+3. rolls a strike in the first frame
+4. rolls a spare in the first frame
+5. throws error when pins appear to stand back up after being knocked down
+6. throws error when pins object is not passed
+7. assigns player name or 'John' as default to this.playerName
+8. rolls the second frame
+9. rolls a spare in the first frame and scores after
+10. rolls a strike in the first frame and scores after
+11. rolls three strike in a row and scores after
+12. rolls a combination of spare and strikes
+13. gutter game
+14. perfect game
+15. all 1 game
+16. 10th frame: strike then spare
+17. 10th frame: strike, strike, then score
+18. 10th frame: spare then strike
+19. 10th frame: spare then score
+20. 10th frame: gutter, spare then score
+21. game with a variety of scores, strikes and spares
+
+### this.writeScoreBoard()
+
+1. rolls the first ball, displays as string
+2. hides next frame score
+3. returns empty object when no roll had been rolled yet
+4. strike: show as X and hides unfinished scores
+5. strike: shows unfinished scores after sufficient rolls
+6. strike: three strikes in a row
+7. strike then spare
+8. spare: show as / and hides unfinished scores
+9. spare: shows unfinished scores after sufficient rolls
+10. spare then strike
+11. does not mutate this.score
+12. displays 0 as '-' for pins rolled but not cumulative score
+13. gutter game
+14. 10th frame: strike then score
+15. 10th frame: strike then spare
+16. 10th frame: strike, strike, then score
+17. 10th frame: triple strike
+18. 10th frame: strike, strike, unfinished game
+19. 10th frame: strike, score, unfinished game
+20. 10th frame: strike, unfinished game
+21. 10th frame: strike then all gutter
+22. 10th frame: spare then score
+23. 10th frame: spare then strike
+24. 10th frame: spare then gutter
+25. 10th frame: spare, unfinished game
+26. 10th frame: scores open frame
+27. 10th frame: scores, unfinished game
+28. game with a variety of scores, strikes and spares, tests in between
+
 ## Compile public/app.bundle.js
 
     $ npm run webpack-dev
