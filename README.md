@@ -1,3 +1,5 @@
+# Bowling Game Scoreboard Controller
+
 ## Problem Statement
 
 Imagine you’re tasked with writing the software for a bowling alley that shows the bowling game scoreboard.
@@ -9,6 +11,25 @@ The input to the scoreboard controller is the lane control hardware that reflect
 Using your design, implement (in the programming language of your choosing) the scoring / game state display service that would compute needed data that one typically expects to see on the lane monitor during a game.
 Rules of bowling scoring are 'http://bowling.about.com/od/rulesofthegame/a/bowlingscoring.htm'.
 If you need additional information, there is also more scoring here ('http://slocums.homestead.com/gamescore.html'), but this gets into more complicated areas like fouls, splits, etc.
+
+## Setup
+
+This repository has been written in Cloud9 development environment.
+It can be cloned at 'https://c9.io/tonnamb/bowling_game'.
+
+If cloning through GitHub is preferred, please execute these commands:
+
+    $ git clone https://github.com/tonnamb/bowling_game.git
+    $ cd bowling_game
+    $ npm install
+
+## Technologies
+
+* JavaScript ES6
+* Mocha, Chai (test-driven development, behavior-driven syntax)
+* webpack (modules bundler, babel-loader)
+* babel (transpile ES6 into ES5)
+* static `express` server
 
 ## Design of "BowlingGame" class
 
@@ -80,25 +101,6 @@ Figure 2: Bowling scoreboard example
 * logic is more complex for 10th frame
   * 'X' can appear on all 3 rolls
   * '/' can appear on the 2nd and 3rd roll.
-
-## Technologies
-
-* JavaScript ES6
-* Mocha, Chai (test-driven development, behavior-driven syntax)
-* webpack (modules bundler, babel-loader)
-* babel (transpile ES6 into ES5)
-* static `express` server
-
-## Setup
-
-This repository has been written in Cloud9 development environment.
-It can be cloned at 'https://c9.io/tonnamb/bowling_game'.
-
-If cloning through GitHub is preferred, please execute these commands:
-
-    $ git clone https://github.com/tonnamb/bowling_game.git
-    $ cd bowling_game
-    $ npm install
 
 ## Running tests
 
