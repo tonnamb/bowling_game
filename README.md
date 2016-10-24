@@ -90,7 +90,7 @@ Figure 2: Bowling scoreboard example
 ![Scoreboard](https://camo.githubusercontent.com/ad2710d5e239994189d3f15d2d927225cf9a2b0a/687474703a2f2f7777772e7770636c69706172742e636f6d2f72656372656174696f6e2f73706f7274732f626f776c696e672f626f776c696e675f73636f726573686565745f6578616d706c652e706e67)
 
 * for rendering in the front-end
-* returns scoreboard format, as shown in Figure 2
+* returns a JavaScript object with a scoreboard format as shown in Figure 2
 * { frameIndex: { rollIndex: 'rollScore', cumScore: '#'}, ... }
 * e.g. {1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '7', 2: '/', cumScore: '37'}, 3: {1: '7', 2: '-', cumScore: '44'}}
 * strike = 'X' in the second roll box
