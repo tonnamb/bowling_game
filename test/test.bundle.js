@@ -591,6 +591,7 @@
 				if (this._isEndOfGame()) {
 					return;
 				}
+
 				// this.pinsAfter is set to null at the end of every frame, thus all pins are up
 				this.pinsBefore = this.pinsAfter || {
 					1: true,
@@ -630,6 +631,7 @@
 					}
 					// for frame 10
 				} else {
+					// does not increment this.currentRoll if this.currentRoll === 3, i.e. game should end after 3 rolls
 					if (this.currentRoll !== 3) {
 						// reset pins if strike or spare
 						if (this._isStrike(10, this.currentRoll) || this._isSpare()) {
@@ -642,7 +644,7 @@
 						} else if (this._isStrike(10, 1)) {
 							this.currentRoll += 1;
 						}
-						// does not move to next roll if 1st roll = not strike, 2nd roll = pins are left
+						// does not increment this.currentRoll if no strike or spare, i.e. game should end after 2 rolls in such case
 					}
 				}
 			}
@@ -912,7 +914,14 @@
 		}, {
 			key: '_isEndOfGame',
 			value: function _isEndOfGame() {
-				return this.currentFrame === 10 && this.score[this.currentFrame][this.currentRoll] !== undefined;
+				return this.currentFrame === 10 && this.score[10][this.currentRoll] !== undefined;
+				// second comparison is need becaused:
+				// if there is no strike or spare in the 10th frame, the game should end after 2 rolls
+				// logic in this.roll(pins) will take care of this by not incrementing this.currentRoll after the 2nd roll
+				// thus, after the 2nd roll, this.score[10][this.currentRoll] will be defined
+				// on the other hand, if there are strikes or spare in the 10th frame, the game should end after 3 rolls
+				// logic in this.roll(pins) will take care of this by not incrementing this.currentRoll after the 3rd roll
+				// thus, after the 3rd roll, this.score[10][this.currentRoll] will be defined
 			}
 		}, {
 			key: '_zeroOrNum',

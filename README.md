@@ -10,6 +10,14 @@ Using your design, implement (in the programming language of your choosing) the 
 Rules of bowling scoring are 'http://bowling.about.com/od/rulesofthegame/a/bowlingscoring.htm'.
 If you need additional information, there is also more scoring here ('http://slocums.homestead.com/gamescore.html'), but this gets into more complicated areas like fouls, splits, etc.
 
+## Design of "BowlingGame" class
+
+* One game entity per player
+* A game has 10 frames
+* A frame has one or two rolls
+* The tenth frame has two or three rolls
+* The score for a spare or a strike depends on the frames successor
+
 ## Requirements
 
 Write class "BowlingGame" with public methods:
@@ -31,12 +39,26 @@ Figure 1: Pins bottom-up labelling convention
   * labeled bottom-up as Figure 1
   * true = standing up, false = knocked down
   * reflects the lane control hardware
+* does nothing if end of game
+  * checked using this._isEndOfGame() method
 * update these variables:
-  * this.pinsBefore and this.pinsAfter: used to calculate score of roll with this._comparePins()
-  * this.currentFrame: keep track of the current frame, i.e. player is going to roll in this frame next
-  * this.currentRoll: keep track of the current roll within the current frame, i.e. player is going to roll this roll next
-  * this.score: keep track of score, update using this._calcScore()
-  * this.pinsData: keep track of pins data for each roll, will be useful for future implementation of modifyScore method
+  * this.pinsBefore and this.pinsAfter
+    * used to calculate score of roll with this._comparePins()
+    * throw error if pin stands back up after being knocked down
+  * this.score
+    * e.g. {1: {1: 10, cumScore: 20}, 2: {1: 7, 2: 3, cumScore: 37}, 3: {1: 7, 2: 0, cumScore: 44}, 4: {cumScore: 44}}
+    * update using this._calcScore()
+    * takes care of spare and strike bonuses by logic inside this._calcScore(): 
+      1. enable bonus flags when strike or spare (this._boolStrikeBonus1, this._boolStrikeBonus2, this._boolSpareBonus), which is tested using this._isStrike() and this._isSpare()
+      2. add score to previous frames if bonus flag is enabled
+  * this.currentFrame and this.currentRoll
+    * current frame = player is going to roll in this frame next
+    * current roll = player is going to roll this roll next
+    * these information is required for this._calcScore()
+    * logic is slightly different for 10th frame
+  * this.pinsData
+    * stores pins object for each roll
+    * useful for future implementation of method for modifying scores
 
 ### this.writeScoreBoard()
 
@@ -44,18 +66,20 @@ Figure 2: Bowling scoreboard example
 
 ![Scoreboard](https://camo.githubusercontent.com/ad2710d5e239994189d3f15d2d927225cf9a2b0a/687474703a2f2f7777772e7770636c69706172742e636f6d2f72656372656174696f6e2f73706f7274732f626f776c696e672f626f776c696e675f73636f726573686565745f6578616d706c652e706e67)
 
-* returns scoreboard format, as shown in Figure 2, for rendering in the front-end
-* does not return empty frames where the game has not reached those frames yet
-* { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', frameScore: '#'}, ... }
+* for rendering in the front-end
+* returns scoreboard format, as shown in Figure 2
+* { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', cumScore: '#'}, ... }
 * e.g. {1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '7', 2: '/', cumScore: '37'}, 3: {1: '7', 2: '-', cumScore: '44'}}
-
-## Design of "BowlingGame" class
-
-* One game entity per player
-* A game has 10 frames
-* A frame has one or two rolls
-* The tenth frame has two or three rolls
-* The score for a spare or a strike depends on the frames successor
+* strike = 'X' in the second box
+  * hides cumScore if two next rolls does not yet exist
+* spare = '/'
+  * hides cumScore if next ball is not rolled yet
+* gutter = '-'
+  * using this._zeroOrNum(score, frame, roll)
+* does not return empty frames where the game has not reached those frames yet, which requires less data transmission to front-end
+* logic is more complex for 10th frame
+  * 'X' can appear on all 3 rolls
+  * '/' can appear on the 2nd and 3rd roll.
 
 ## Technologies
 
