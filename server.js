@@ -29,5 +29,5 @@ app.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", function(err) 
     return;
   }
   console.log("Server listening at " + (process.env.IP || "0.0.0.0") + ":" + (process.env.PORT || 8080));
-  console.log("If running from Cloud9, code is live at https://bowling-game-tonnamb.c9users.io/ (Replace 'tonnamb' with your username)");
+  console.log("If running from Cloud9, code is live at https://bowling-game-tonnamb.c9users.io/ (Replace 'tonnamb' with your Cloud9 username)");
 });

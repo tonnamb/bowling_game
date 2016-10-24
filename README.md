@@ -39,7 +39,7 @@ If cloning through GitHub is preferred, please execute these commands:
 * The tenth frame has two or three rolls
 * The score for a spare or a strike depends on the frames successor
 
-## Requirements
+## Requirements & Implementation Details
 
 Write class "BowlingGame" with public methods:
 
@@ -60,23 +60,25 @@ Figure 1: Pins bottom-up labelling convention
   * labeled bottom-up as Figure 1
   * true = standing up, false = knocked down
   * reflects the lane control hardware
+  * throw error if pins object is not passed
 * does nothing if end of game
   * checked using this._isEndOfGame() method
-* update these variables:
+* update these object properties:
   * this.pinsBefore and this.pinsAfter
-    * used to calculate score of roll with this._comparePins()
-    * throw error if pin stands back up after being knocked down
+    * used to calculate score of the roll with this._comparePins()
+    * this._comparePins() throw error if a pin stands back up after being knocked down
   * this.score
+    * { frameIndex: { rollIndex: rollScore, cumScore: #}, ... }
     * e.g. {1: {1: 10, cumScore: 20}, 2: {1: 7, 2: 3, cumScore: 37}, 3: {1: 7, 2: 0, cumScore: 44}, 4: {cumScore: 44}}
     * update using this._calcScore()
     * takes care of spare and strike bonuses by logic inside this._calcScore(): 
-      1. enable bonus flags when strike or spare (this._boolStrikeBonus1, this._boolStrikeBonus2, this._boolSpareBonus), which is tested using this._isStrike() and this._isSpare()
-      2. add score to previous frames if bonus flag is enabled
+      * enable bonus flags when strike or spare (this._boolStrikeBonus1, this._boolStrikeBonus2, this._boolSpareBonus), which is tested using this._isStrike() and this._isSpare()
+      * add score to previous frame's cumScore if bonus flag is enabled
   * this.currentFrame and this.currentRoll
     * current frame = player is going to roll in this frame next
-    * current roll = player is going to roll this roll next
-    * these information is required for this._calcScore()
-    * logic is slightly different for 10th frame
+    * current roll = player is going to roll this ball next
+    * these information are required for this._calcScore()
+    * logic is slightly different for 10th frame, i.e. next frame score and pinsData are not initialized after end of frame
   * this.pinsData
     * stores pins object for each roll
     * useful for future implementation of method for modifying scores
@@ -89,18 +91,21 @@ Figure 2: Bowling scoreboard example
 
 * for rendering in the front-end
 * returns scoreboard format, as shown in Figure 2
-* { frameIndex: {1: '1-9 or -', 2: '1-9 or - or / or X', cumScore: '#'}, ... }
+* { frameIndex: { rollIndex: 'rollScore', cumScore: '#'}, ... }
 * e.g. {1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '7', 2: '/', cumScore: '37'}, 3: {1: '7', 2: '-', cumScore: '44'}}
-* strike = 'X' in the second box
+* strike = 'X' in the second roll box
   * hides cumScore if two next rolls does not yet exist
 * spare = '/'
   * hides cumScore if next ball is not rolled yet
 * gutter = '-'
   * using this._zeroOrNum(score, frame, roll)
-* does not return empty frames where the game has not reached those frames yet, which requires less data transmission to front-end
-* logic is more complex for 10th frame
+* hides cumScore if not all balls are rolled in the frame
+* in the 10th frame, logic is slightly more complex
   * 'X' can appear on all 3 rolls
-  * '/' can appear on the 2nd and 3rd roll.
+  * '/' can appear on the 2nd and 3rd roll
+* does not return empty frames where the game has not reached those frames yet
+  * benefit = requires less data transmission to front-end
+  * drawback = handling logic required in the front-end
 
 ## Running tests
 
@@ -171,8 +176,10 @@ Figure 2: Bowling scoreboard example
 
     $ npm start
 
-If running from Cloud9, view project at 'https://bowling-game-tonnamb.c9users.io/'. (Replace 'tonnamb' with your username)
-Otherwise, the public files are served at 'http://localhost:8080/'
+If running from Cloud9, view project at 'https://bowling-game-tonnamb.c9users.io/'. (Replace 'tonnamb' with your Cloud9 username)
+Otherwise, the public files are served at 'http://localhost:8080/'.
+
+Currently, this is just a blank page with console.log('Loading app.js').
 
 ## To-do
 

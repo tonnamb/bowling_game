@@ -617,7 +617,7 @@
 				// logic for moving into next roll and frame
 				// for frames 1-9
 				if (this.currentFrame !== 10) {
-					// move to next frame if strike or this is the second roll
+					// move to next frame if strike or this is the second roll, i.e. end of frame
 					if (this._isStrike() || this.currentRoll === 2) {
 						this.pinsAfter = null;
 						this.currentFrame += 1;
