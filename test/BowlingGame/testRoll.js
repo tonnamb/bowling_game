@@ -16,6 +16,7 @@ describe("BowlingGame", function() {
             expect(game.pinsAfter).to.deep.equal(pins);
             expect(game.currentFrame).to.equal(1);
             expect(game.currentRoll).to.equal(2);
+            expect(game.pinsData).to.deep.equal({1: {1: pins}});
         });
         it("rolls the first frame", function() {
             var game = new BowlingGame();
@@ -27,6 +28,7 @@ describe("BowlingGame", function() {
             expect(game.pinsAfter).to.equal(null);
             expect(game.currentFrame).to.equal(2);
             expect(game.currentRoll).to.equal(1);
+            expect(game.pinsData).to.deep.equal({1: {1: pins, 2: pins2}, 2: {}});
         });
         it("rolls a strike in the first frame", function() {
             var game = new BowlingGame();
@@ -40,6 +42,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(true);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins}, 2: {}});
         });
         it("rolls a spare in the first frame", function() {
             var game = new BowlingGame();
@@ -55,6 +58,7 @@ describe("BowlingGame", function() {
             expect(game._boolSpareBonus).to.equal(true);
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins, 2: pins2}, 2: {}});
         });
         it("throws error when pins appear to stand back up after being knocked down", function() {
             var game = new BowlingGame();
@@ -90,6 +94,7 @@ describe("BowlingGame", function() {
             expect(game.pinsAfter).to.equal(null);
             expect(game.currentFrame).to.equal(3);
             expect(game.currentRoll).to.equal(1);
+            expect(game.pinsData).to.deep.equal({1: {1: pins, 2: pins2}, 2: {1: pins3, 2: pins4}, 3: {}});
         });
         it("rolls a spare in the first frame and scores after", function() {
             var game = new BowlingGame();
@@ -118,6 +123,7 @@ describe("BowlingGame", function() {
             expect(game.currentRoll).to.equal(1);
             expect(game._isSpare(2)).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins, 2: pins2}, 2: {1: pins3, 2: pins4}, 3: {}});
         });
         it("rolls a strike in the first frame and scores after", function() {
             var game = new BowlingGame();
@@ -150,6 +156,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins}, 2: {1: pins2, 2: pins3}, 3: {1: pins4}});
         });
         it("rolls three strike in a row and scores after", function() {
             var game = new BowlingGame();
@@ -194,6 +201,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: pins1, 2: pins2}, 5: {}});
         });
         it("rolls a combination of spare and strikes", function() {
             var game = new BowlingGame();
@@ -229,6 +237,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins1, 2: pins2}, 2: {1: strike}, 3: {1: strike}, 4: {1: pins1, 2: pins2}, 5: {1: pins1}});
         });
         it("gutter game", function() {
             var game = new BowlingGame();
@@ -242,6 +251,7 @@ describe("BowlingGame", function() {
             expect(game.currentFrame).to.equal(10);
             expect(game.currentRoll).to.equal(2);
             expect(game._isEndOfGame()).to.equal(true);
+            expect(game.pinsData).to.deep.equal({1: {1: gutter, 2: gutter}, 2: {1: gutter, 2: gutter}, 3: {1: gutter, 2: gutter}, 4: {1: gutter, 2: gutter}, 5: {1: gutter, 2: gutter}, 6: {1: gutter, 2: gutter}, 7: {1: gutter, 2: gutter}, 8: {1: gutter, 2: gutter}, 9: {1: gutter, 2: gutter}, 10: {1: gutter, 2: gutter}});
         });
         it("perfect game", function() {
             var game = new BowlingGame();
@@ -257,6 +267,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: strike, 2: strike, 3: strike}});
         });
         it("all 1 game", function() {
             var game = new BowlingGame();
@@ -274,6 +285,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: pins1, 2: pins2}, 2: {1: pins1, 2: pins2}, 3: {1: pins1, 2: pins2}, 4: {1: pins1, 2: pins2}, 5: {1: pins1, 2: pins2}, 6: {1: pins1, 2: pins2}, 7: {1: pins1, 2: pins2}, 8: {1: pins1, 2: pins2}, 9: {1: pins1, 2: pins2}, 10: {1: pins1, 2: pins2}});
         });
         it("10th frame: strike then spare", function () {
             var game = new BowlingGame();
@@ -296,6 +308,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: strike, 2: pins1, 3: pins2}});
         });
         it("10th frame: strike, strike, then score", function() {
             var game = new BowlingGame();
@@ -317,6 +330,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: strike, 2: strike, 3: pins1}});
         });
         it("10th frame: spare then strike", function() {
             var game = new BowlingGame();
@@ -341,6 +355,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: pins1, 2: pins2, 3: strike}});
         });
         it("10th frame: spare then score", function() {
             var game = new BowlingGame();
@@ -366,6 +381,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: pins1, 2: pins2, 3: pins3}});
         });
         it("10th frame: gutter, spare then score", function() {
             var game = new BowlingGame();
@@ -392,6 +408,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: gutter, 2: pins2, 3: pins3}});
         });
         it("game with a variety of scores, strikes and spares", function() {
             // sample score at http://bowling.about.com/od/rulesofthegame/a/bowlingscoring.htm
@@ -439,6 +456,7 @@ describe("BowlingGame", function() {
             expect(game._boolStrikeBonus1).to.equal(false);
             expect(game._boolStrikeBonus2).to.equal(false);
             expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: allout}, 2: {1: pins7, 2:allout}, 3: {1: pins7, 2: pins9}, 4: {1: pins9, 2: allout}, 5: {1: allout}, 6: {1: allout}, 7: {1: allout}, 8: {1: pins2, 2: pins5}, 9: {1: pins6, 2: allout}, 10: {1: pins7, 2: allout, 3: pins3}});
         });
     });
 });

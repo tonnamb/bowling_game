@@ -9,125 +9,125 @@ describe("BowlingGame", function() {
     describe("this.writeScoreBoard()", function() {
         it("rolls the first ball, displays as string", function() {
             var game = new BowlingGame();
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '', cumScore: ''}});
-           expect(scoreBoard[1][1]).to.be.a('string');
-           expect(scoreBoard[1][2]).to.be.a('string');
-           expect(scoreBoard[1].cumScore).to.be.a('string');
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '', cumScore: ''}});
+            expect(scoreBoard[1][1]).to.be.a('string');
+            expect(scoreBoard[1][2]).to.be.a('string');
+            expect(scoreBoard[1].cumScore).to.be.a('string');
         });
         it("hides next frame score", function() {
-           var game = new BowlingGame();
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var pins3 = {1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins3);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '3', cumScore: '9'}});
+            var game = new BowlingGame();
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var pins3 = {1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins3);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '3', cumScore: '9'}});
        });
        it("returns empty object when no roll had been rolled yet", function () {
-           var game = new BowlingGame();
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({});
+            var game = new BowlingGame();
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({});
        });
        it("strike: show as X and hides unfinished scores", function() {
-           var game = new BowlingGame();
-           var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(strike);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: ''}});
+            var game = new BowlingGame();
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(strike);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: ''}});
        });
        it("strike: shows unfinished scores after sufficient rolls", function() {
-           var game = new BowlingGame();
-           // Frame 1: strike
-           var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(strike);
-           // Frame 2
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var pins3 = {1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins3);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '19'}, 2: {1: '6', 2: '3', cumScore: '28'}});
+            var game = new BowlingGame();
+            // Frame 1: strike
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(strike);
+            // Frame 2
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var pins3 = {1: false, 2: false, 3: false, 4: false, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins3);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '19'}, 2: {1: '6', 2: '3', cumScore: '28'}});
        });
        it("strike: three strikes in a row", function() {
-           var game = new BowlingGame();
-           var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(strike);
-           game.roll(strike);
-           game.roll(strike);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '30'}, 2: {1: '', 2: 'X', cumScore: ''}, 3: {1: '', 2: 'X', cumScore: ''}});
+            var game = new BowlingGame();
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(strike);
+            game.roll(strike);
+            game.roll(strike);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '30'}, 2: {1: '', 2: 'X', cumScore: ''}, 3: {1: '', 2: 'X', cumScore: ''}});
        });
        it("strike then spare", function() {
-           var game = new BowlingGame();
-           var allout = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           // Frame 1: strike
-           game.roll(allout);
-           // Frame 2: spare
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           game.roll(allout);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '6', 2: '/', cumScore: ''}});
+            var game = new BowlingGame();
+            var allout = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            // Frame 1: strike
+            game.roll(allout);
+            // Frame 2: spare
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            game.roll(allout);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: '20'}, 2: {1: '6', 2: '/', cumScore: ''}});
        });
        it("spare: show as / and hides unfinished scores", function() {
-           var game = new BowlingGame();
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins4);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: ''}});
+            var game = new BowlingGame();
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins4);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: ''}});
        });
        it("spare: shows unfinished scores after sufficient rolls", function() {
-           var game = new BowlingGame();
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins4);
-           var pins7 = {1: false, 2: false, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins7);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: '17'}, 2: {1: '7', 2: '', cumScore: ''}});
+            var game = new BowlingGame();
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins4);
+            var pins7 = {1: false, 2: false, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins7);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: '17'}, 2: {1: '7', 2: '', cumScore: ''}});
        });
        it("spare then strike", function() {
-           var game = new BowlingGame();
-           var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins6);
-           var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(pins4);
-           var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(strike);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: '20'}, 2: {1: '', 2: 'X', cumScore: ''}});
+            var game = new BowlingGame();
+            var pins6 = {1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins6);
+            var pins4 = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(pins4);
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(strike);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '6', 2: '/', cumScore: '20'}, 2: {1: '', 2: 'X', cumScore: ''}});
        });
        it("does not mutate this.score", function() {
-           var game = new BowlingGame();
-           var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
-           game.roll(strike);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: ''}});
-           expect(game.score).to.deep.equal({1: {1: 10, cumScore: 10}, 2: {cumScore: 10}});
+            var game = new BowlingGame();
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            game.roll(strike);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '', 2: 'X', cumScore: ''}});
+            expect(game.score).to.deep.equal({1: {1: 10, cumScore: 10}, 2: {cumScore: 10}});
        });
        it("displays 0 as '-' for pins rolled but not cumulative score", function() {
-           var game = new BowlingGame();
-           var gutter = {1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true};
-           game.roll(gutter);
-           game.roll(gutter);
-           game.roll(gutter);
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '-', 2: '-', cumScore: '0'}, 2: {1: '-', 2: '', cumScore: ''}});
+            var game = new BowlingGame();
+            var gutter = {1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true};
+            game.roll(gutter);
+            game.roll(gutter);
+            game.roll(gutter);
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '-', 2: '-', cumScore: '0'}, 2: {1: '-', 2: '', cumScore: ''}});
        });
        it("gutter game", function() {
-           var game = new BowlingGame();
-           var gutter = {1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true};
-           for (var i = 0; i < 20; i += 1) {
-               game.roll(gutter);
-           }
-           var scoreBoard = game.writeScoreBoard();
-           expect(scoreBoard).to.deep.equal({1: {1: '-', 2: '-', cumScore: '0'}, 2: {1: '-', 2: '-', cumScore: '0'}, 3: {1: '-', 2: '-', cumScore: '0'}, 4: {1: '-', 2: '-', cumScore: '0'}, 5: {1: '-', 2: '-', cumScore: '0'}, 6: {1: '-', 2: '-', cumScore: '0'}, 7: {1: '-', 2: '-', cumScore: '0'}, 8: {1: '-', 2: '-', cumScore: '0'}, 9: {1: '-', 2: '-', cumScore: '0'}, 10: {1: '-', 2: '-', 3: '', cumScore: '0'}});
+            var game = new BowlingGame();
+            var gutter = {1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true};
+            for (var i = 0; i < 20; i += 1) {
+                game.roll(gutter);
+            }
+            var scoreBoard = game.writeScoreBoard();
+            expect(scoreBoard).to.deep.equal({1: {1: '-', 2: '-', cumScore: '0'}, 2: {1: '-', 2: '-', cumScore: '0'}, 3: {1: '-', 2: '-', cumScore: '0'}, 4: {1: '-', 2: '-', cumScore: '0'}, 5: {1: '-', 2: '-', cumScore: '0'}, 6: {1: '-', 2: '-', cumScore: '0'}, 7: {1: '-', 2: '-', cumScore: '0'}, 8: {1: '-', 2: '-', cumScore: '0'}, 9: {1: '-', 2: '-', cumScore: '0'}, 10: {1: '-', 2: '-', 3: '', cumScore: '0'}});
        })
        it('10th frame: strike then score', function() {
             var game = new BowlingGame();
