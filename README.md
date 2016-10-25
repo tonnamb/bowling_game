@@ -136,6 +136,7 @@ Figure 2: Bowling scoreboard example
 19. 10th frame: spare then score
 20. 10th frame: gutter, spare then score
 21. game with a variety of scores, strikes and spares
+22. does nothing after end of game
 
 ### this.writeScoreBoard()
 

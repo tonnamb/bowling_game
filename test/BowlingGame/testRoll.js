@@ -458,5 +458,33 @@ describe("BowlingGame", function() {
             expect(game._boolSpareBonus).to.equal(false);
             expect(game.pinsData).to.deep.equal({1: {1: allout}, 2: {1: pins7, 2:allout}, 3: {1: pins7, 2: pins9}, 4: {1: pins9, 2: allout}, 5: {1: allout}, 6: {1: allout}, 7: {1: allout}, 8: {1: pins2, 2: pins5}, 9: {1: pins6, 2: allout}, 10: {1: pins7, 2: allout, 3: pins3}});
         });
+        it("does nothing after end of game", function() {
+            var game = new BowlingGame();
+            var strike = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false};
+            for (var i = 0; i < 12; i += 1) {
+                game.roll(strike);
+            }
+            expect(game.pinsAfter).to.deep.equal(strike);
+            expect(game.currentFrame).to.equal(10);
+            expect(game.currentRoll).to.equal(3);
+            expect(game._isEndOfGame()).to.equal(true);
+            expect(game.score).to.deep.equal({1: {1: 10, cumScore: 30}, 2: {1: 10, cumScore: 60}, 3: {1: 10, cumScore: 90}, 4: {1: 10, cumScore: 120}, 5: {1: 10, cumScore: 150}, 6: {1: 10, cumScore: 180}, 7: {1: 10, cumScore: 210}, 8: {1: 10, cumScore: 240}, 9: {1: 10, cumScore: 270}, 10: {1: 10, 2: 10, 3: 10, cumScore: 300}});
+            expect(game._boolStrikeBonus1).to.equal(false);
+            expect(game._boolStrikeBonus2).to.equal(false);
+            expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: strike, 2: strike, 3: strike}});
+            // Extra roll
+            game.roll(strike);
+            // Same tests
+            expect(game.pinsAfter).to.deep.equal(strike);
+            expect(game.currentFrame).to.equal(10);
+            expect(game.currentRoll).to.equal(3);
+            expect(game._isEndOfGame()).to.equal(true);
+            expect(game.score).to.deep.equal({1: {1: 10, cumScore: 30}, 2: {1: 10, cumScore: 60}, 3: {1: 10, cumScore: 90}, 4: {1: 10, cumScore: 120}, 5: {1: 10, cumScore: 150}, 6: {1: 10, cumScore: 180}, 7: {1: 10, cumScore: 210}, 8: {1: 10, cumScore: 240}, 9: {1: 10, cumScore: 270}, 10: {1: 10, 2: 10, 3: 10, cumScore: 300}});
+            expect(game._boolStrikeBonus1).to.equal(false);
+            expect(game._boolStrikeBonus2).to.equal(false);
+            expect(game._boolSpareBonus).to.equal(false);
+            expect(game.pinsData).to.deep.equal({1: {1: strike}, 2: {1: strike}, 3: {1: strike}, 4: {1: strike}, 5: {1: strike}, 6: {1: strike}, 7: {1: strike}, 8: {1: strike}, 9: {1: strike}, 10: {1: strike, 2: strike, 3: strike}});
+        });
     });
 });
